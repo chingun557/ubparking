@@ -899,17 +899,7 @@ function Footer() {
           </nav>
         </div>
         <div className="ft-right">
-          <p className="ft-app-label">Апп татах</p>
-          <div className="ft-store-btns">
-            <a href="https://apps.apple.com/mn/app/hoome/id6443804226" className="ft-store" target="_blank" rel="noopener noreferrer">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg>
-              App Store
-            </a>
-            <a href="https://play.google.com/store/apps/details?id=mn.novelsoft.homesocial&pcampaignid=web_share" className="ft-store" target="_blank" rel="noopener noreferrer">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76C3.45 24 3.82 24.04 4.22 23.82L14.44 17.94L11.26 14.74L3.18 23.76ZM.23 1.21C.08 1.48 0 1.82 0 2.23V21.77C0 22.18.08 22.52.23 22.8L.3 22.87L11.07 12V11.77L.3 1.14.23 1.21ZM20.15 9.73L17.37 8.17L13.85 11.77L17.37 15.37L20.18 13.77C21.02 13.29 21.02 10.21 20.15 9.73ZM4.22.18C3.82-.04 3.45 0 3.18.24L11.26 9.26 14.44 6.06 4.22.18Z"/></svg>
-              Google Play
-            </a>
-          </div>
+          
         </div>
       </footer>
   )
