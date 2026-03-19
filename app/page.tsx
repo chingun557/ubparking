@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 const css = `
@@ -334,6 +334,14 @@ const CLIENTS = [
   { name: "MCS Плаза",    emoji: "🏢" },
 ]
 
+type ModalProps = { onClose: () => void }
+
+type NavProps = { onLogin: () => void; onContact: () => void }
+
+type HeroProps = {}
+
+type CTAProps = { onContact: () => void }
+
 // ─── LOGO ────────────────────────────────────────────────────────────────────
 
 function Logo() {
@@ -347,7 +355,7 @@ function Logo() {
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 
-function LoginModal({ onClose }) {
+function LoginModal({ onClose }: ModalProps) {
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="modal-box" style={{ textAlign: "center" }}>
@@ -363,7 +371,7 @@ function LoginModal({ onClose }) {
   )
 }
 
-function ContactModal({ onClose }) {
+function ContactModal({ onClose }: ModalProps) {
   const [sent, setSent] = useState(false)
   function handleSend() {
     setSent(true)
@@ -390,8 +398,8 @@ function ContactModal({ onClose }) {
 
 // ─── NAV ─────────────────────────────────────────────────────────────────────
 
-function Nav({ onLogin, onContact }) {
-  const scrollTo = id => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+function Nav({ onLogin, onContact }: NavProps) {
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   return (
     <nav className="nav">
       <div className="nav-inner">
@@ -539,15 +547,7 @@ function Mockup() {
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 
-function Hero({ onContact }) {
-  const [dlState, setDlState] = useState("idle") // idle | loading | done
-
-  function handleDownload() {
-    setDlState("loading")
-    setTimeout(() => { setDlState("done"); setTimeout(() => setDlState("idle"), 1500) }, 900)
-  }
-
-  const dlLabel = dlState === "loading" ? "⏳ Бэлдэж байна..." : dlState === "done" ? "✓ Татагдлаа!" : "Танилцуулга татах"
+function Hero() {
 
   return (
     <section className="hero">
@@ -570,8 +570,8 @@ function Hero({ onContact }) {
 // ─── FEATURES ────────────────────────────────────────────────────────────────
 
 function PaymentVisual() {
-  const [flash, setFlash] = useState(null)
-  function handleClick(i) {
+  const [flash, setFlash] = useState<number | null>(null)
+  function handleClick(i: number) {
     setFlash(i)
     setTimeout(() => setFlash(null), 700)
   }
@@ -590,8 +590,8 @@ function PaymentVisual() {
 }
 
 function SettingsVisual() {
-  const [toggles, setToggles] = useState(SETTINGS_ITEMS.map(s => s.default))
-  const toggle = i => setToggles(prev => prev.map((v, idx) => idx === i ? !v : v))
+  const [toggles, setToggles] = useState<boolean[]>(SETTINGS_ITEMS.map(s => s.default))
+  const toggle = (i: number) => setToggles(prev => prev.map((v, idx) => idx === i ? !v : v))
   return (
     <div className="feat-visual">
       <div className="settings-vis">
@@ -614,7 +614,7 @@ function SettingsVisual() {
 
 function EngineerVisual() {
   const [cards, setCards] = useState(ENG_CARDS)
-  function resolve(i) {
+  function resolve(i: number) {
     setCards(prev => prev.map((c, idx) => idx === i && c.status === "warn" ? { ...c, status: "ok", sub: "Шинэчлэгдлээ ✓" } : c))
   }
   return (
@@ -763,7 +763,7 @@ function Features() {
           <div>
             <div className="feat-tag">📱 Application</div>
             <h3 className="feat-h">Сул зогсоол харах Мобайл Апп</h3>
-            <p className="feat-p">"Hoome" мобайл аппаар зогсоолуудын байршил, сул зогсоолын тоо, төлбөр төлөлт хийгддэг.</p>
+            <p className="feat-p">&quot;Hoome&quot; мобайл аппаар зогсоолуудын байршил, сул зогсоолын тоо, төлбөр төлөлт хийгддэг.</p>
             <ul className="feat-list">
               {["Hoome аппаар зогсоолуудын сул зайг харах","Төлбөр бодолт, төлбөр хийх","И-баримт бүртгэл"].map(t => <li key={t}>{t}</li>)}
             </ul>
@@ -845,7 +845,7 @@ function LetsTalk() {
 
 // ─── CTA ─────────────────────────────────────────────────────────────────────
 
-function CTA({ onContact }) {
+function CTA({ onContact }: CTAProps) {
   const [dlState, setDlState] = useState("idle")
   function handleDownload() {
     setDlState("loading")
@@ -870,7 +870,6 @@ function CTA({ onContact }) {
 // ─── FOOTER ──────────────────────────────────────────────────────────────────
 
 function Footer() {
-  const scrollTo = id => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   return (
     <footer>
         <div className="ft-left">
@@ -920,7 +919,7 @@ function Footer() {
 
 export default function Page() {
   const [showBackTop, setShowBackTop] = useState(false)
-  const [modal, setModal] = useState(null) // null | "login" | "contact"
+  const [modal, setModal] = useState<null | "login" | "contact">(null)
 
   useEffect(() => {
     const fn = () => setShowBackTop(window.scrollY > 500)
@@ -933,7 +932,7 @@ export default function Page() {
       <style>{css}</style>
 
       <Nav onLogin={() => setModal("login")} onContact={() => setModal("contact")} />
-      <Hero onContact={() => setModal("contact")} />
+      <Hero />
 
       {/* Stats bar */}
       <div className="stats-bar">
