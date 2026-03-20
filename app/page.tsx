@@ -789,7 +789,7 @@ function Customers() {
         <div className="eyebrow">Customers</div>
         <h2 className="sec-title">Parkin Харилцагчид</h2>
         <div className="stat-cards">
-          {[["4,000+","Гаруй машины зогсоол удирддаг"],["40+","Авто зогсоолд нэвтэрсэн"],["20,000+","Өдөрт машины төлбөр бодолт"]].map(([n,t]) => (
+          {[["8,000+","Гаруй машины зогсоол удирддаг"],["150+","Авто зогсоолд нэвтэрсэн"],["60,000+","Өдөрт машины төлбөр бодолт"]].map(([n,t]) => (
             <div key={n} className="stat-card">
               <div className="stat-card-num">{n}</div>
               <div className="stat-card-text">{t}</div>
