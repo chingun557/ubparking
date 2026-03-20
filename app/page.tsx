@@ -924,17 +924,7 @@ export default function Page() {
       <Nav onLogin={() => setModal("login")} onContact={() => setModal("contact")} />
       <Hero />
 
-      {/* Stats bar */}
-      <div className="stats-bar">
-        <div className="stats-inner">
-          {[["4,000+","Гаруй машины зогсоол удирддаг"],["40+","Авто зогсоолд нэвтэрсэн"],["20,000+","Өдөрт машины төлбөр бодолт"]].map(([n,t]) => (
-            <div key={n} className="stat-item">
-              <div className="stat-num">{n}</div>
-              <div className="stat-sub">{t}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      
 
       <Features />
       <Customers />
