@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 const css = `
@@ -227,25 +227,12 @@ ul{list-style:none;padding:0}
 .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
 /* FOOTER */
-footer{border-top:1px solid var(--border);max-width:1280px;margin:0 auto;padding:60px 24px 40px;display:flex;justify-content:space-between;align-items:flex-start;gap:80px;position:relative;z-index:1}
-.ft-left{flex:1}
-.ft-right{flex:0 0 auto;text-align:right}
-.logo{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff}
-.logo-mark{width:32px;height:32px;border-radius:8px}
-.logo-name{letter-spacing:-0.5px}
-.logo-name b{color:var(--yellow)}
-.ft-tagline{font-size:13px;color:var(--dim);margin-bottom:24px}
-.ft-contacts{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
-.ft-contact{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--dim);text-decoration:none;transition:color .2s}
-.ft-contact:hover{color:#fff}
-.ft-contact-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--yellow)}
-.ft-nav{display:flex;gap:24px;margin-top:24px}
-.ft-nav a{font-size:13px;color:var(--dim);text-decoration:none;transition:color .2s}
-.ft-nav a:hover{color:#fff}
-.ft-app-label{font-size:12px;font-weight:700;color:var(--yellow);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
-.ft-store-btns{display:flex;flex-direction:column;gap:8px}
-.ft-store{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid var(--border);font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);text-decoration:none;transition:all .2s}
-.ft-store:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.15);color:#fff}
+.footer{padding:40px 24px 28px;border-top:1px solid var(--border)}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-copy{font-size:13px;color:var(--dim2)}
+.footer-links{display:flex;gap:24px}
+.footer-link{font-size:13px;color:var(--dim2);transition:color .2s;background:none;border:none;cursor:pointer}
+.footer-link:hover{color:#fff}
 
 /* BACK TO TOP */
 .backtop{position:fixed;bottom:28px;right:28px;z-index:99;width:44px;height:44px;border-radius:10px;background:var(--yellow);color:#080B10;border:none;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(245,196,0,0.3);cursor:pointer;transition:all .2s}
@@ -328,19 +315,15 @@ const ENG_CARDS = [
 ]
 
 const CLIENTS = [
-  { name: "Шангри Ла",    emoji: "🏙" },
-  { name: "Наадам Центр", emoji: "🏬" },
-  { name: "Чингис Музей", emoji: "🏛" },
-  { name: "MCS Плаза",    emoji: "🏢" },
+  { name: "Шангри Ла",       emoji: "🏙" },
+  { name: "Наадам Центр",    emoji: "🏬" },
+  { name: "Чингис Музей",    emoji: "🏛" },
+  { name: "MCS Плаза",       emoji: "🏢" },
+  { name: "Монгол Шуудан",   emoji: "📮" },
+  { name: "Хаан Плаза",      emoji: "🏯" },
+  { name: "Санрайз Молл",    emoji: "🛍" },
+  { name: "Их Дэлгүүр",      emoji: "🏪" },
 ]
-
-type ModalProps = { onClose: () => void }
-
-type NavProps = { onLogin: () => void; onContact: () => void }
-
-type HeroProps = {}
-
-type CTAProps = { onContact: () => void }
 
 // ─── LOGO ────────────────────────────────────────────────────────────────────
 
@@ -355,7 +338,7 @@ function Logo() {
 
 // ─── MODAL ───────────────────────────────────────────────────────────────────
 
-function LoginModal({ onClose }: ModalProps) {
+function LoginModal({ onClose }) {
   return (
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="modal-box" style={{ textAlign: "center" }}>
@@ -371,7 +354,7 @@ function LoginModal({ onClose }: ModalProps) {
   )
 }
 
-function ContactModal({ onClose }: ModalProps) {
+function ContactModal({ onClose }) {
   const [sent, setSent] = useState(false)
   function handleSend() {
     setSent(true)
@@ -398,8 +381,8 @@ function ContactModal({ onClose }: ModalProps) {
 
 // ─── NAV ─────────────────────────────────────────────────────────────────────
 
-function Nav({ onLogin, onContact }: NavProps) {
-  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+function Nav({ onLogin, onContact }) {
+  const scrollTo = id => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   return (
     <nav className="nav">
       <div className="nav-inner">
@@ -547,7 +530,15 @@ function Mockup() {
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 
-function Hero() {
+function Hero({ onContact }) {
+  const [dlState, setDlState] = useState("idle") // idle | loading | done
+
+  function handleDownload() {
+    setDlState("loading")
+    setTimeout(() => { setDlState("done"); setTimeout(() => setDlState("idle"), 1500) }, 900)
+  }
+
+  const dlLabel = dlState === "loading" ? "⏳ Бэлдэж байна..." : dlState === "done" ? "✓ Татагдлаа!" : "Танилцуулга татах"
 
   return (
     <section className="hero">
@@ -561,7 +552,12 @@ function Hero() {
       <p className="hero-p">
         Зогсоолын үйл ажиллагааг автоматжуулан захиалга, цахим төлбөр, борлуулалтаа өсгөх бүхий л боломжийг Parkin танд олгоно.
       </p>
-     
+      <div className="hero-actions">
+        <button className="btn-hero" onClick={handleDownload} disabled={dlState !== "idle"}>{dlLabel}</button>
+        <button className="btn-hero-outline" onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}>
+          Демо үзэх →
+        </button>
+      </div>
       <Mockup />
     </section>
   )
@@ -570,8 +566,8 @@ function Hero() {
 // ─── FEATURES ────────────────────────────────────────────────────────────────
 
 function PaymentVisual() {
-  const [flash, setFlash] = useState<number | null>(null)
-  function handleClick(i: number) {
+  const [flash, setFlash] = useState(null)
+  function handleClick(i) {
     setFlash(i)
     setTimeout(() => setFlash(null), 700)
   }
@@ -590,8 +586,8 @@ function PaymentVisual() {
 }
 
 function SettingsVisual() {
-  const [toggles, setToggles] = useState<boolean[]>(SETTINGS_ITEMS.map(s => s.default))
-  const toggle = (i: number) => setToggles(prev => prev.map((v, idx) => idx === i ? !v : v))
+  const [toggles, setToggles] = useState(SETTINGS_ITEMS.map(s => s.default))
+  const toggle = i => setToggles(prev => prev.map((v, idx) => idx === i ? !v : v))
   return (
     <div className="feat-visual">
       <div className="settings-vis">
@@ -614,7 +610,7 @@ function SettingsVisual() {
 
 function EngineerVisual() {
   const [cards, setCards] = useState(ENG_CARDS)
-  function resolve(i: number) {
+  function resolve(i) {
     setCards(prev => prev.map((c, idx) => idx === i && c.status === "warn" ? { ...c, status: "ok", sub: "Шинэчлэгдлээ ✓" } : c))
   }
   return (
@@ -763,7 +759,7 @@ function Features() {
           <div>
             <div className="feat-tag">📱 Application</div>
             <h3 className="feat-h">Сул зогсоол харах Мобайл Апп</h3>
-            <p className="feat-p">&quot;Hoome&quot; мобайл аппаар зогсоолуудын байршил, сул зогсоолын тоо, төлбөр төлөлт хийгддэг.</p>
+            <p className="feat-p">"Hoome" мобайл аппаар зогсоолуудын байршил, сул зогсоолын тоо, төлбөр төлөлт хийгддэг.</p>
             <ul className="feat-list">
               {["Hoome аппаар зогсоолуудын сул зайг харах","Төлбөр бодолт, төлбөр хийх","И-баримт бүртгэл"].map(t => <li key={t}>{t}</li>)}
             </ul>
@@ -845,7 +841,7 @@ function LetsTalk() {
 
 // ─── CTA ─────────────────────────────────────────────────────────────────────
 
-function CTA({ onContact }: CTAProps) {
+function CTA({ onContact }) {
   const [dlState, setDlState] = useState("idle")
   function handleDownload() {
     setDlState("loading")
@@ -870,38 +866,19 @@ function CTA({ onContact }: CTAProps) {
 // ─── FOOTER ──────────────────────────────────────────────────────────────────
 
 function Footer() {
+  const scrollTo = id => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
   return (
-    <footer>
-        <div className="ft-left">
-          <a href="#" className="logo">
-            <div className="logo-mark">🏠</div>
-            <span className="logo-name">park<b>in</b></span>
-          </a>
-          
-          <div className="ft-contacts">
-            <a href="mailto:info@nomadicss.mn" className="ft-contact">
-              <span className="ft-contact-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
-              info@nomadicss.mn
-            </a>
-            <a href="tel:80162424" className="ft-contact">
-              <span className="ft-contact-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-              8016-2424, 7222-2828
-            </a>
-            <a href="#" className="ft-contact">
-              <span className="ft-contact-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
-              УБ, Хан-Уул, Хаан цамхаг, 22 давхар
-            </a>
-          </div>
-          <nav className="ft-nav">
-            {["Танилцуулга", "Үнэ цэнэ", "Бизнес", "Бидний тухай"].map((l) => (
-              <a key={l} href="#">{l}</a>
-            ))}
-          </nav>
+    <footer className="footer">
+      <div className="footer-inner">
+        <Logo />
+        <span className="footer-copy">© 2024 Parkin. Бүх эрх хуулиар хамгаалагдсан.</span>
+        <div className="footer-links">
+          {[["features","Боломжууд"],["customers","Харилцагчид"],["talk","Компани"]].map(([id, label]) => (
+            <button key={id} className="footer-link" onClick={() => scrollTo(id)}>{label}</button>
+          ))}
         </div>
-        <div className="ft-right">
-          
-        </div>
-      </footer>
+      </div>
+    </footer>
   )
 }
 
@@ -909,7 +886,7 @@ function Footer() {
 
 export default function Page() {
   const [showBackTop, setShowBackTop] = useState(false)
-  const [modal, setModal] = useState<null | "login" | "contact">(null)
+  const [modal, setModal] = useState(null) // null | "login" | "contact"
 
   useEffect(() => {
     const fn = () => setShowBackTop(window.scrollY > 500)
@@ -922,9 +899,19 @@ export default function Page() {
       <style>{css}</style>
 
       <Nav onLogin={() => setModal("login")} onContact={() => setModal("contact")} />
-      <Hero />
+      <Hero onContact={() => setModal("contact")} />
 
-      
+      {/* Stats bar */}
+      <div className="stats-bar">
+        <div className="stats-inner">
+          {[["8,000+","Гаруй машины зогсоол удирддаг"],["150+","Авто зогсоолд нэвтэрсэн"],["60,000+","Өдөрт машины төлбөр бодолт"]].map(([n,t]) => (
+            <div key={n} className="stat-item">
+              <div className="stat-num">{n}</div>
+              <div className="stat-sub">{t}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <Features />
       <Customers />
