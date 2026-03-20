@@ -320,7 +320,7 @@ const CLIENTS = [
   { name: "Чингис Музей",   img: "/chingis.png"    },
   { name: "Central Tower",   img: "/centraltower.png"    },
   { name: "Amusement Park",  img: "/caption.png"  },
-  { name: "Наран Плаза",     img: "/naran-plaza.png"       },
+  { name: "Dragon Terminal",     img: "/840.png"       },
   { name: "Intermed",        img: "/unnamed.png"   },
   { name: "Central Stadium", img: "/stadium.png"    },
 ]
