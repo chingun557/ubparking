@@ -202,7 +202,7 @@ ul{list-style:none;padding:0}
 .client-card{border-radius:14px;background:var(--bg2);border:1px solid var(--border);overflow:hidden;transition:all .25s;cursor:pointer}
 .client-card:hover{border-color:rgba(245,196,0,0.3);transform:translateY(-3px)}
 .client-card:active{transform:scale(0.96)}
-.client-img{height:140px;display:flex;align-items:center;justify-content:center;background:var(--bg3);font-size:56px;border-bottom:1px solid var(--border)}
+.client-img{height:150px;display:flex;align-items:center;justify-content:center;background:var(--bg1);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
 .client-name{padding:16px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;text-align:center}
 
 /* LET'S TALK */
@@ -315,14 +315,14 @@ const ENG_CARDS = [
 ]
 
 const CLIENTS = [
-  { name: "Шангри Ла",       emoji: "🏙" },
-  { name: "Наадам Центр",    emoji: "🏬" },
-  { name: "Чингис Музей",    emoji: "🏛" },
-  { name: "MCS Плаза",       emoji: "🏢" },
-  { name: "Монгол Шуудан",   emoji: "📮" },
-  { name: "Хаан Плаза",      emoji: "🏯" },
-  { name: "Санрайз Молл",    emoji: "🛍" },
-  { name: "Их Дэлгүүр",      emoji: "🏪" },
+  { name: "Shangri-La",      img: "/Shangri.png"  },
+  { name: "Naadam Center",   img: "/customer-naadam.png"     },
+  { name: "Чингис Музей",   img: "/chingis.png"    },
+  { name: "Central Tower",   img: "/centraltower.png"    },
+  { name: "Amusement Park",  img: "/caption.png"  },
+  { name: "Наран Плаза",     img: "/naran-plaza.png"       },
+  { name: "Intermed",        img: "/unnamed.png"   },
+  { name: "Central Stadium", img: "/stadium.png"    },
 ]
 
 // ─── LOGO ────────────────────────────────────────────────────────────────────
@@ -795,7 +795,18 @@ function Customers() {
         <div className="client-grid">
           {CLIENTS.map(c => (
             <div key={c.name} className="client-card">
-              <div className="client-img">{c.emoji}</div>
+              <div className="client-img">
+                <img
+                  src={c.img}
+                  alt={c.name}
+                  onError={e => {
+                    e.currentTarget.style.display = "none"
+                    e.currentTarget.nextElementSibling.style.display = "flex"
+                  }}
+                  style={{ width: "100%", objectFit: "cover" }}
+                />
+                <span style={{ display: "none", fontSize: 48, alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>🏢</span>
+              </div>
               <div className="client-name">{c.name}</div>
             </div>
           ))}
@@ -901,7 +912,17 @@ export default function Page() {
       <Nav onLogin={() => setModal("login")} onContact={() => setModal("contact")} />
       <Hero onContact={() => setModal("contact")} />
 
-      
+      {/* Stats bar */}
+      <div className="stats-bar">
+        <div className="stats-inner">
+          {[["8,000+","Гаруй машины зогсоол удирддаг"],["150+","Авто зогсоолд нэвтэрсэн"],["60,000+","Өдөрт машины төлбөр бодолт"]].map(([n,t]) => (
+            <div key={n} className="stat-item">
+              <div className="stat-num">{n}</div>
+              <div className="stat-sub">{t}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <Features />
       <Customers />
